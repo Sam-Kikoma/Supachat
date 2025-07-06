@@ -10,6 +10,8 @@ const Navbar = () => {
 		setMenu(!menu);
 	};
 
+	const displayName = user?.user_metadata.user_name || user?.email;
+
 	useEffect(() => {
 		const handleResize = () => {
 			if (window.innerWidth >= 768 && menu) {
@@ -23,7 +25,7 @@ const Navbar = () => {
 	}, [menu]);
 
 	return (
-		<nav className="relative">
+		<nav className="relative  border-b-2 border-b-blue-200">
 			<div className="flex justify-between p-4">
 				<div>
 					<Link to={"/"}>Supachat</Link>
@@ -38,7 +40,26 @@ const Navbar = () => {
 
 				{/* Auth */}
 				<div className="hidden md:flex gap-2">
-					<button onClick={signInWithGithub}>Sign in with Github</button>
+					{user ? (
+						<div>
+							{user.user_metadata.avatar_url && (
+								<img
+									src={user.user_metadata.avatar_url}
+									alt="User avatar"
+									className="btn btn-ghost btn-circle avatar"
+								/>
+							)}
+							<span className="p-4">{displayName}</span>
+							<button onClick={signOut} className="cursor-pointer btn btn-outline btn-error">
+								Sign Out
+							</button>
+						</div>
+					) : (
+						<button onClick={signInWithGithub} className="btn btn-outline cursor-pointer">
+							Sign in with Github
+						</button>
+					)}
+
 					{/* <button>Sign in</button> */}
 				</div>
 
