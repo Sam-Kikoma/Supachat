@@ -5,12 +5,19 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import CreatePost from "./pages/CreatePostPage.tsx";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
+		children: [
+			{
+				path: "create",
+				element: <CreatePost />,
+			},
+		],
 	},
 ]);
 
