@@ -23,7 +23,7 @@ const CreatePost = () => {
 	const [content, setContent] = useState<string>("");
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-	const { mutate } = useMutation({
+	const { mutate, isPending, isError } = useMutation({
 		mutationFn: (data: { post: PostInput; imageFile: File }) => {
 			return createPost(data.post, data.imageFile);
 		},
@@ -48,14 +48,14 @@ const CreatePost = () => {
 	};
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label className="block" htmlFor="title">
-						Title
+		<div className="w-full max-w-md">
+			<form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-base-100 p-6 rounded-xl shadow-md">
+				<div className="form-control">
+					<label className="label" htmlFor="title">
+						<span className="label-text">Title</span>
 					</label>
 					<input
-						className="input block"
+						className="input input-bordered"
 						type="text"
 						id="title"
 						required
@@ -63,12 +63,13 @@ const CreatePost = () => {
 						value={title}
 					/>
 				</div>
-				<div>
-					<label htmlFor="content" className="block">
-						Content
+
+				<div className="form-control">
+					<label htmlFor="content" className="label">
+						<span className="label-text">Content</span>
 					</label>
 					<textarea
-						className="textarea block"
+						className="textarea textarea-bordered"
 						id="content"
 						required
 						rows={5}
@@ -76,13 +77,30 @@ const CreatePost = () => {
 						value={content}
 					/>
 				</div>
-				<div>
-					<label htmlFor="image">Upload Image</label>
-					<input type="file" id="image" required accept="image/*" onChange={handleFileChange} />
+
+				<div className="form-control">
+					<label htmlFor="image" className="label">
+						<span className="label-text">Upload Image</span>
+					</label>
+					<input
+						type="file"
+						id="image"
+						required
+						accept="image/*"
+						onChange={handleFileChange}
+						className="file-input file-input-bordered"
+					/>
 				</div>
-				<button className="btn btn-soft btn-info mt-2" type="submit">
-					Create Post
+
+				<button className="btn btn-info mt-2" type="submit">
+					{isPending ? <span className="loading loading-spinner" /> : "Create Post"}
 				</button>
+
+				{isError && (
+					<div role="alert" className="alert alert-error mt-2">
+						<span>Error creating post</span>
+					</div>
+				)}
 			</form>
 		</div>
 	);
